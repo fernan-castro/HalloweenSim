@@ -1,7 +1,7 @@
 """
     Project: Haunted House GUI
-    Team Members:
-    Date:
+    Team Members: Adriana & Fernando
+    Date: 29/10/2024
     Description: A GUI that simulates a haunted house with interactive buttons and sounds.
 """
 
