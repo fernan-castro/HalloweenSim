@@ -21,4 +21,6 @@ DIFFICULTY: MEDIUM-HIGH
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Make sure to pip install playsound
+Make sure to: 
+pip install playsound
+pip install pillow
