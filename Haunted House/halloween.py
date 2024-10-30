@@ -11,6 +11,8 @@ import requests
 from io import BytesIO
 import pygame
 import threading
+from playsound import playsound
+
 
 # Function to play sound using pygame
 def play_sound(sound_file):
@@ -105,12 +107,17 @@ def turn_on_lights():
     leave_button = tk.Button(root, text="Leave the House", command=jump_scare, bg='grey', fg='black')
     leave_button.place(relx=0.5, rely=0.6, anchor='center')
 
+def play_creepy_sound():
+    threading.Thread(target=lambda: playsound('SFX/creppy_sound.mp3')).start()
+
 # Create initial buttons
 enter_button = tk.Button(root, text="Enter the house", command=enter_house, bg='grey', fg='black')
 enter_button.place(relx=0.5, rely=0.8, anchor='center')  # Centered near the bottom
 
 leave_button = tk.Button(root, text="Turn around and leave", command=jump_scare, bg='grey', fg='black')
 leave_button.place(relx=0.5, rely=0.9, anchor='center')  # Centered below "Enter the house" button
+
+play_creepy_sound()
 
 # Start the GUI loop
 root.mainloop()
