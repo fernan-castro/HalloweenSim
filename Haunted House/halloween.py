@@ -7,39 +7,75 @@
 
 import tkinter as tk
 from playsound import playsound
-
+from PIL import Image, ImageTk
+import requests
+from io import BytesIO
 
 # Set up the main window
 root = tk.Tk()
 root.title("Haunted House Simulator")
-root.geometry("800x600")
-root.configure(bg="black")
+root.attributes('-fullscreen', True)
+root.configure(bg='black')
 
-# Create widgets
-label = tk.Label(root, text="Welcome to the Haunted House!", font=("Helvetica", 16))
-label.pack(pady=20)
+# Load the Haunted House and Jump Scare images from URLs
+haunted_image_url = 'https://i.ibb.co/g4Gh1Pf/Haunted-House.jpg'  # Haunted house URL
+jumpscare_image_url = 'https://i.ibb.co/1mQ6d6F/jumpscare.jpg'  # Jump scare URL
 
-# Function to turn on lights
-def turn_on_lights():
-    label.config(text="The lights are on!")
+try:
+    # Load haunted house background image
+    response = requests.get(haunted_image_url)
+    response.raise_for_status()
+    haunted_image = Image.open(BytesIO(response.content))
+    haunted_photo = ImageTk.PhotoImage(haunted_image)
 
-# Function to play creepy sound
-def play_creepy_sound():
-    playsound('SFX/creppy_sound.mp3')
+    # Load jump scare image
+    response = requests.get(jumpscare_image_url)
+    response.raise_for_status()
+    jumpscare_image = Image.open(BytesIO(response.content))
+    jumpscare_photo = ImageTk.PhotoImage(jumpscare_image)
 
-# Function to open door
-def open_door():
-    label.config(text="The door creaks open...")
+except Exception as e:
+    print(f"Error loading images: {e}")
+    haunted_photo, jumpscare_photo = None, None
 
-# Create buttons
-light_button = tk.Button(root, text="Turn on Lights", command=turn_on_lights)
-light_button.pack(pady=10)
+# Display haunted house image if it loaded successfully
+canvas = tk.Canvas(root, bg='black')
+canvas.pack(fill='both', expand=True)
 
-sound_button = tk.Button(root, text="Play Creepy Sound", command=play_creepy_sound)
-sound_button.pack(pady=10)
+if haunted_photo:
+    canvas.create_image(0, 0, anchor='nw', image=haunted_photo)
 
-door_button = tk.Button(root, text="Open Door", command=open_door)
-door_button.pack(pady=10)
+# Function for the jump scare
+def jump_scare():
+    # Hide buttons
+    enter_button.place_forget()
+    leave_button.place_forget()
+    
+    # Display the jump scare image
+    canvas.create_image(0, 0, anchor='nw', image=jumpscare_photo)
+    
+    # Play creepy sound effect
+    playsound('SFX/jumpscare.mp3')  # Ensure the sound file is present and the path is correct
+
+    # Close the program after a brief delay (1000 ms = 1 second)
+    root.after(1000, root.destroy)  # This will exit the program after 1 second
+
+# Function to enter the house
+def enter_house():
+    enter_button.place_forget()
+    leave_button.place_forget()
+    # Additional code for exploring the house can be added here
+
+# Function to turn around and leave
+def turn_around_and_leave():
+    jump_scare()  # Trigger the jump scare
+
+# Create initial buttons
+enter_button = tk.Button(root, text="Enter the house", command=enter_house, bg='grey', fg='black')
+enter_button.place(relx=0.5, rely=0.8, anchor='center')  # Centered near the bottom
+
+leave_button = tk.Button(root, text="Turn around and leave", command=turn_around_and_leave, bg='grey', fg='black')
+leave_button.place(relx=0.5, rely=0.9, anchor='center')  # Centered below "Enter the house" button
 
 # Start the GUI loop
 root.mainloop()
