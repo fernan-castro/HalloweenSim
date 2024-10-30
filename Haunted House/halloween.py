@@ -7,6 +7,7 @@
 
 import tkinter as tk
 from playsound import playsound
+import threading
 
 
 # Set up the main window
@@ -25,7 +26,7 @@ def turn_on_lights():
 
 # Function to play creepy sound
 def play_creepy_sound():
-    playsound('SFX/creppy_sound.mp3')
+    threading.Thread(target=lambda: playsound('SFX/creppy_sound.mp3')).start()
 
 # Function to open door
 def open_door():
@@ -35,11 +36,10 @@ def open_door():
 light_button = tk.Button(root, text="Turn on Lights", command=turn_on_lights)
 light_button.pack(pady=10)
 
-sound_button = tk.Button(root, text="Play Creepy Sound", command=play_creepy_sound)
-sound_button.pack(pady=10)
-
 door_button = tk.Button(root, text="Open Door", command=open_door)
 door_button.pack(pady=10)
 
+play_creepy_sound()
+    
 # Start the GUI loop
 root.mainloop()
