@@ -24,3 +24,4 @@ DIFFICULTY: MEDIUM-HIGH
 Make sure to: 
 pip install playsound
 pip install pillow
+pip install pygame
