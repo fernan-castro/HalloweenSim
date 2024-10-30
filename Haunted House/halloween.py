@@ -6,15 +6,22 @@
 """
 
 import tkinter as tk
-from playsound import playsound
 from PIL import Image, ImageTk
 import requests
 from io import BytesIO
+import pygame
+import threading
+
+# Function to play sound using pygame
+def play_sound(sound_file):
+    pygame.mixer.init()  # Initialize the mixer module
+    pygame.mixer.music.load(sound_file)  # Load the sound file
+    pygame.mixer.music.play()  # Play the sound
 
 # Set up the main window
 root = tk.Tk()
 root.title("Haunted House Simulator")
-root.attributes('-fullscreen', True)
+root.geometry('500x500')  # Set the window size
 root.configure(bg='black')
 
 # Load the Haunted House and Jump Scare images from URLs
@@ -54,8 +61,9 @@ def jump_scare():
     # Display the jump scare image
     canvas.create_image(0, 0, anchor='nw', image=jumpscare_photo)
     
-    # Play creepy sound effect
-    playsound('SFX/jumpscare.mp3')  # Ensure the sound file is present and the path is correct
+    # Play creepy sound effect in a separate thread
+    sound_thread = threading.Thread(target=play_sound, args=('SFX/jumpscare.mp3',))
+    sound_thread.start()
 
     # Close the program after a brief delay (1000 ms = 1 second)
     root.after(1000, root.destroy)  # This will exit the program after 1 second
